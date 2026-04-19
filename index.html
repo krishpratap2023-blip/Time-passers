@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Congrats Celebration</title>
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle, #0f172a, #020617);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+h1 {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    text-align: center;
+    font-size: 3.5rem;
+    opacity: 0;
+    animation: fadeSlide 1s ease forwards 0.5s;
+}
+
+@keyframes fadeSlide {
+    to {
+        opacity: 1;
+        transform: translateY(10px);
+    }
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+img {
+    width: 320px;
+    border-radius: 20px;
+    opacity: 0;
+    transform: scale(0.3);
+    animation: popIn 0.8s ease forwards;
+}
+
+@keyframes popIn {
+    60% { transform: scale(1.2); }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 💥 Boom Shockwave */
+.boom {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: boomExpand 0.6s ease-out forwards;
+}
+
+@keyframes boomExpand {
+    to {
+        width: 500px;
+        height: 500px;
+        opacity: 0;
+    }
+}
+
+/* 🎊 Burst particles */
+.particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: hsl(calc(360 * var(--i)), 100%, 60%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    to {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* 🌧️ Falling confetti */
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 14px;
+    background: hsl(calc(360 * var(--i)), 100%, 60%);
+    top: -20px;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0.7;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Congrats!</h1>
+
+<div class="container" id="container">
+    <img src="file.jpg">
+</div>
+
+<script>
+const container = document.getElementById("container");
+
+/* 💥 BOOM + burst */
+function createExplosion() {
+    // Boom ring
+    const boom = document.createElement("div");
+    boom.classList.add("boom");
+    container.appendChild(boom);
+
+    setTimeout(() => boom.remove(), 600);
+
+    // Burst particles
+    for (let i = 0; i < 80; i++) {
+        const p = document.createElement("div");
+        p.classList.add("particle");
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 250;
+
+        const x = Math.cos(angle) * distance + "px";
+        const y = Math.sin(angle) * distance + "px";
+
+        p.style.setProperty("--x", x);
+        p.style.setProperty("--y", y);
+        p.style.setProperty("--i", Math.random());
+
+        container.appendChild(p);
+
+        setTimeout(() => p.remove(), 1000);
+    }
+}
+
+/* 🌧️ Continuous falling confetti */
+function createConfetti() {
+    for (let i = 0; i < 8; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.animationDuration = (2 + Math.random() * 3) + "s";
+        c.style.setProperty("--i", Math.random());
+
+        document.body.appendChild(c);
+
+        setTimeout(() => c.remove(), 5000);
+    }
+}
+
+/* Trigger everything */
+window.onload = () => {
+    setTimeout(createExplosion, 400);
+    setInterval(createConfetti, 200);
+};
+</script>
+
+</body>
+</html>
